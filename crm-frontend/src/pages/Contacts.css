@@ -1,0 +1,130 @@
+/* Contacts.css */
+.contacts-container {
+    animation: fadeIn 0.3s ease-in;
+}
+
+.contacts-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+}
+
+.contacts-header h2 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0;
+}
+
+/* Utility Toolbar (Import/Export/Add) */
+.toolbar {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.btn-secondary {
+    background: white;
+    border: 1px solid #e2e8f0;
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #475569;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-secondary:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+}
+
+.import-label {
+    margin: 0;
+}
+
+/* Search & Filter Bar */
+.search-filter-bar {
+    background: white;
+    padding: 1rem;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.search-wrapper {
+    flex-grow: 1;
+}
+
+.filter-input {
+    padding: 0.6rem 1rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    transition: border-color 0.2s;
+}
+
+.filter-input:focus {
+    outline: none;
+    border-color: #2563eb;
+}
+
+/* Table Specifics */
+.contact-name-cell {
+    display: flex;
+    flex-direction: column;
+}
+
+.contact-name-link {
+    font-weight: 600;
+    color: #2563eb;
+    text-decoration: none;
+}
+
+.contact-name-link:hover {
+    text-decoration: underline;
+}
+
+.contact-company {
+    font-size: 0.75rem;
+    color: #64748b;
+}
+
+/* Tag Badges */
+.tag-badge {
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.tag-hot-lead { background: #fee2e2; color: #991b1b; }
+.tag-warm-lead { background: #ffedd5; color: #9a3412; }
+.tag-cold-lead { background: #f1f5f9; color: #475569; }
+.tag-customer { background: #dcfce7; color: #166534; }
+
+/* Modal Form Specifics */
+.contacts-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.full-col { grid-column: span 2; }
+
+.form-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #475569;
+    margin-bottom: 4px;
+}

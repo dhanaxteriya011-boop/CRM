@@ -1,0 +1,72 @@
+/* Invoices.css */
+.invoices-page {
+    animation: fadeIn 0.3s ease-in;
+}
+
+/* Financial Summary Header */
+.invoice-summary-bar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.summary-card {
+    background: white;
+    padding: 1.25rem;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
+}
+
+.summary-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+}
+
+.summary-value {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #1e293b;
+}
+
+.summary-value.unpaid { color: #f59e0b; }
+.summary-value.paid { color: #10b981; }
+
+/* Status Styles */
+.inv-status {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.inv-paid { background: #dcfce7; color: #15803d; }
+.inv-unpaid { background: #fef3c7; color: #92400e; }
+.inv-cancelled { background: #f1f5f9; color: #475569; }
+
+/* Table Columns */
+.invoice-num {
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: 700;
+    color: #475569;
+}
+
+.amount-cell {
+    font-weight: 700;
+    color: #1e293b;
+}
+
+/* Form Styles */
+.invoice-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+}
+
+.full-span { grid-column: span 2; }

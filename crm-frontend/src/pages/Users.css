@@ -1,0 +1,77 @@
+/* Users.css */
+.users-page {
+    animation: fadeIn 0.3s ease-in;
+}
+
+/* User Identity Cell */
+.user-info-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.user-avatar {
+    width: 36px;
+    height: 36px;
+    background: #e2e8f0;
+    color: #475569;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+}
+
+/* Role Badges */
+.role-badge {
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.role-admin { background: #e0e7ff; color: #3730a3; } /* Indigo */
+.role-manager { background: #dbeafe; color: #1e40af; } /* Blue */
+.role-sales { background: #dcfce7; color: #166534; } /* Green */
+.role-support { background: #fef9c3; color: #854d0e; } /* Yellow/Orange */
+
+/* Status Styling */
+.status-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.dot-active { background-color: #22c55e; box-shadow: 0 0 8px #22c55e; }
+.dot-inactive { background-color: #94a3b8; }
+
+/* Action Buttons */
+.btn-toggle-active {
+    background: transparent;
+    border: 1px solid #e2e8f0;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-toggle-active:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+}
+
+.btn-deactivate { color: #dc2626; border-color: #fecaca; }
+.btn-activate { color: #16a34a; border-color: #bbf7d0; }
