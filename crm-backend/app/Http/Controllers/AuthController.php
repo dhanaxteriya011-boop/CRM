@@ -1,76 +1,82 @@
 <?php
 namespace App\Http\Controllers;
-use App\Models\User;
+
+use App\Models\{User, Subscription, SubscriptionPlan};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
-    public function register(Request $request)
+    /**
+     * ADMIN SELF-REGISTRATION (only route for self-register)
+     * After registering, admin must subscribe to a plan before adding members
+     */
+    public function adminRegister(Request $request)
     {
         $data = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|string|min:6|confirmed',
-            'role' => 'required|string|in:Admin,Manager,Sales,Support',
+            'name'                  => 'required|string|max:255',
+            'email'                 => 'required|email|unique:users',
+            'username'              => 'required|string|unique:users|min:3|max:30|regex:/^[a-zA-Z0-9_]+$/',
+            'password'              => 'required|string|min:6|confirmed',
+            'company_name'          => 'nullable|string',
         ]);
+
         $user = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
+            'name'     => $data['name'],
+            'email'    => $data['email'],
+            'username' => $data['username'],
             'password' => Hash::make($data['password']),
         ]);
-        $user->assignRole($data['role']);
+        $user->assignRole('Admin');
+
         $token = $user->createToken('crm')->plainTextToken;
         return response()->json(['user' => $user->load('roles'), 'token' => $token], 201);
     }
 
+    /**
+     * LOGIN — works for both admin (email or username) and members (username)
+     */
     public function login(Request $request)
     {
         $data = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
+            'login'    => 'required|string',    // accepts email OR username
+            'password' => 'required|string',
         ]);
-        $user = User::where('email', $data['email'])->first();
+
+        // Try email first, then username
+        $user = User::where('email', $data['login'])
+            ->orWhere('username', $data['login'])
+            ->first();
+
         if (!$user || !Hash::check($data['password'], $user->password)) {
-            throw ValidationException::withMessages(['email' => ['Invalid credentials']]);
+            throw ValidationException::withMessages(['login' => ['Invalid credentials']]);
         }
+
+        if (!$user->is_active) {
+            return response()->json(['message' => 'Your account has been deactivated. Contact your admin.'], 403);
+        }
+
         $token = $user->createToken('crm')->plainTextToken;
-        return response()->json(['user' => $user->load('roles'), 'token' => $token]);
+        return response()->json([
+            'user'  => $user->load('roles', 'adminSubscription.plan'),
+            'token' => $token,
+        ]);
     }
 
     public function me(Request $request)
     {
-        return response()->json($request->user()->load('roles'));
+        $user = $request->user()->load('roles');
+        $sub  = $user->getActiveSubscription();
+        return response()->json([
+            'user'         => $user,
+            'subscription' => $sub?->load('plan'),
+        ]);
     }
 
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
         return response()->json(['message' => 'Logged out']);
-    }
-
-    public function forgotPassword(Request $request)
-    {
-        $request->validate(['email' => 'required|email']);
-        \Password::sendResetLink($request->only('email'));
-        return response()->json(['message' => 'Reset link sent']);
-    }
-
-    public function resetPassword(Request $request)
-    {
-        $request->validate([
-            'token' => 'required',
-            'email' => 'required|email',
-            'password' => 'required|min:6|confirmed',
-        ]);
-        $status = \Password::reset($request->only('email','password','password_confirmation','token'),
-            function ($user, $password) {
-                $user->forceFill(['password' => Hash::make($password)])->save();
-            }
-        );
-        return $status === \Password::PASSWORD_RESET
-            ? response()->json(['message' => 'Password reset successfully'])
-            : response()->json(['message' => 'Invalid token'], 400);
     }
 }

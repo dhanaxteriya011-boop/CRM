@@ -33,12 +33,11 @@ export function AuthProvider({ children }) {
   }, []);
 
   // 🔹 Login
-  const login = async (email, password) => {
-    const res = await api.post('/login', { email, password });
-
+// Update login function to accept 'login' field (not email)
+  const login = async (loginId, password) => {
+    const res = await api.post('/login', { login: loginId, password });
     localStorage.setItem('token', res.data.token);
     setUser(res.data.user);
-
     return res.data.user;
   };
 

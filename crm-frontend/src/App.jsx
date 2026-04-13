@@ -20,6 +20,9 @@ import Notifications from './pages/Notifications';
 import Settings from './pages/Settings';
 import Calls from './pages/Calls';
 import CallDetail from './pages/CallDetail';
+import AdminRegister from './pages/AdminRegister';
+import Subscription  from './pages/Subscription';
+import Members       from './pages/Members';
 function PrivateRoute({ children }) {
   const { user, loading } = useAuth();
   if (loading) return <div>Loading...</div>;
@@ -31,8 +34,10 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/admin/register" element={<AdminRegister />} />
         <Route path="/" element={<PrivateRoute><Layout /></PrivateRoute>}>
+        <Route path="subscription" element={<Subscription />} />
+          <Route path="members"      element={<Members />} />
           <Route index element={<Dashboard />} />
           <Route path="contacts" element={<Contacts />} />
           <Route path="contacts/:id" element={<ContactDetail />} />
