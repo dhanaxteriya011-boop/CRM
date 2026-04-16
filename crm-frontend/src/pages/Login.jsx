@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import './Login.css'; // Ensure this is imported!
 
 export default function Login() {
   const [form, setForm] = useState({ login: '', password: '' });
@@ -15,7 +16,6 @@ export default function Login() {
     setLoading(true);
     try {
       const user = await login(form.login, form.password);
-      // Redirect admin to subscription page if no active subscription
       if (user.roles?.some(r => r.name === 'Admin')) {
         const sub = user.adminSubscription;
         if (!sub || sub.status !== 'active') {
@@ -25,35 +25,69 @@ export default function Login() {
       }
       navigate('/');
     } catch (err) {
-      setError(err.response?.data?.message || err.response?.data?.errors?.login?.[0] || 'Login failed');
+      setError(err.response?.data?.message || 'Invalid credentials');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div style={{ maxWidth: '360px', margin: '80px auto' }}>
-      <h2>CRM Login</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: '10px' }}>
-          <label>Username or Email<br />
-            <input value={form.login} onChange={e => setForm({ ...form, login: e.target.value })}
-              required placeholder="Enter your username or email" style={{ width: '100%' }} />
-          </label>
+    <div className="login-page">
+      <div className="login-container">
+        <div className="login-header">
+          <div className="crm-logo-circle">C</div>
+          <h2>Welcome Back</h2>
+          <p>Enter your credentials to access your CRM</p>
         </div>
-        <div style={{ marginBottom: '10px' }}>
-          <label>Password<br />
-            <input type="password" value={form.password} onChange={e => setForm({ ...form, password: e.target.value })}
-              required style={{ width: '100%' }} />
-          </label>
+
+        <div className="login-card">
+          {error && <div className="error-banner">{error}</div>}
+          
+          <form onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label className="label-text">Username or Email</label>
+              <input 
+                className="input-box"
+                type="text"
+                value={form.login} 
+                onChange={e => setForm({ ...form, login: e.target.value })}
+                required 
+                placeholder="e.g. admin@company.com" 
+              />
+            </div>
+
+            <div className="form-group">
+              <label className="label-text">Password</label>
+              <input 
+                className="input-box"
+                type="password" 
+                value={form.password} 
+                onChange={e => setForm({ ...form, password: e.target.value })}
+                required 
+                placeholder="••••••••"
+              />
+            </div>
+
+            <div className="login-options">
+              <label className="remember-me">
+                <input type="checkbox" /> Remember me
+              </label>
+              <Link to="/forgot-password" name="forgot-link" className="forgot-link">Forgot password?</Link>
+            </div>
+
+            <button type="submit" className="login-btn" disabled={loading}>
+              {loading ? 'Signing in...' : 'Sign In'}
+            </button>
+          </form>
         </div>
-        <button type="submit" disabled={loading} style={{ width: '100%', padding: '10px' }}>
-          {loading ? 'Logging in...' : 'Login'}
-        </button>
-      </form>
-      <p>Admin? <Link to="/admin/register">Create Admin Account</Link></p>
-      <p style={{ color: '#888', fontSize: '13px' }}>Team members: use the username and password your admin gave you.</p>
+
+        <div className="footer-text">
+          <p>Don't have an account? <Link to="/admin/register" className="signup-link">Create Admin Account</Link></p>
+          <div className="team-info">
+            Team members: Check your email for login credentials provided by your manager.
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
